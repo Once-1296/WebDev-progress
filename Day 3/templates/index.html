@@ -13,7 +13,10 @@
     <button onclick="submitGuess()">Submit Guess</button>
 
     <p id="responseText"></p>
-
+    <br>
+    <p id="lastGuess"></p>
+    
+    <button onclick="getLastGuess()">Your last Guess</button>
     <script>
         async function submitGuess() {
             const num = document.getElementById('guessInput').value;
@@ -21,7 +24,7 @@
                 document.getElementById('responseText').innerText = "⚠️ Please enter a number.";
                 return;
             }
-
+	
             const res = await fetch('/api/guess', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -35,6 +38,19 @@
                 document.getElementById('responseText').innerText = 
                     `Your Guess: ${data.your_guess}\nResult: ${data.result}`;
             }
+        }
+        async function getLastGuess(){
+        	const res = await fetch('/api/status',{
+        	method: 'GET'
+        	});
+        	const data = await res.json();
+        	if('message' in data){
+        	document.getElementById('lastGuess').innerText=data.message;
+        	}
+        	else
+        	{
+        	document.getElementById('lastGuess').innerText=`Your last guess was: ${data.last_guess}`;
+        	}
         }
     </script>
 </body>

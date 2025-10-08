@@ -27,7 +27,7 @@ def check_guess():
     except ValueError:
         return jsonify({"error": "Invalid number"}), 400
 
-    # Compare guess with secret number
+    print(f"number:{number}")# Compare guess with secret number
     if guess < number:
         result = "Too Low!"
     elif guess > number:
@@ -35,6 +35,8 @@ def check_guess():
     else:
         number = np.random.randint(1,1000000001)
         result = "🎉 Correct! You guessed the number! (Enter new number to try again)"
+
+     
 
     return jsonify({
         "your_guess": guess,
@@ -44,6 +46,7 @@ def check_guess():
 # Optional GET route (if you want to view the current guess result)
 @app.route('/api/status', methods=["GET"])
 def status():
+    print("Hello world")
     if guess is None:
         return jsonify({"message": "No guess made yet."}), 200
     return jsonify({"last_guess": guess}), 200

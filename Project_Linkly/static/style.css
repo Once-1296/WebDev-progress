@@ -37,8 +37,8 @@ button:hover {
     color: #333;
     white-space: pre-line;
 }
-#lastGuess{
+#LinksContainer{
 	margin-top: 20px;
 	font-size: 16px;
-	color: blue
+	color: rgb(8, 185, 216)
 }

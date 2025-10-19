@@ -6,29 +6,29 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>🎯 Guess the Secret Number!</h1>
-    <p>Enter a number between <b>1</b> and <b>1,000,000,000</b></p>
+    <h1>✨Linkly: URL Shortener</h1>
+    <p>Enter a <b>url</b> to shorten</p>
 
-    <input id="guessInput" type="number" placeholder="Enter your guess">
-    <button onclick="submitGuess()">Submit Guess</button>
+    <input id="linkInput" type="text" placeholder="Enter your url">
+    <button onclick="submitLink()">Submit Link</button>
 
     <p id="responseText"></p>
     <br>
-    <p id="lastGuess"></p>
+    <div id = "LinksContainer"></div>
     
-    <button onclick="getLastGuess()">Your last Guess</button>
+    <button onclick="getAllLinks()">All links list</button>
     <script>
-        async function submitGuess() {
-            const num = document.getElementById('guessInput').value;
-            if (!num) {
-                document.getElementById('responseText').innerText = "⚠️ Please enter a number.";
+        async function submitLink() {
+            const link = document.getElementById('linkInput').value;
+            if (!link) {
+                document.getElementById('responseText').innerText = "⚠️ Please enter a link.";
                 return;
             }
 	
-            const res = await fetch('/api/guess', {
+            const res = await fetch('/api/shorten', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ num })
+                body: JSON.stringify({ link })
             });
 
             const data = await res.json();
@@ -36,21 +36,23 @@
                 document.getElementById('responseText').innerText = "❌ " + data.error;
             } else {
                 document.getElementById('responseText').innerText = 
-                    `Your Guess: ${data.your_guess}\nResult: ${data.result}`;
+                    `Your link: ${data.long_link}\nShort url: ${data.result}`;
             }
         }
-        async function getLastGuess(){
-        	const res = await fetch('/api/status',{
+        async function getAllLinks(){
+        	const res = await fetch('/api/show',{
         	method: 'GET'
         	});
         	const data = await res.json();
-        	if('message' in data){
-        	document.getElementById('lastGuess').innerText=data.message;
-        	}
-        	else
-        	{
-        	document.getElementById('lastGuess').innerText=`Your last guess was: ${data.last_guess}`;
-        	}
+        	// Reference to the empty div
+  const container = document.getElementById("LinksContainer");
+container.innerHTML = "";
+  // Dynamically insert key-value pairs
+  for (const [key, value] of Object.entries(data)) {
+    const itemDiv = document.createElement("div");
+    itemDiv.innerHTML = `Original link: <b>${key}</b>: Shortened Link <i>${value}</i>`;
+    container.appendChild(itemDiv);
+  }
         }
     </script>
 </body>

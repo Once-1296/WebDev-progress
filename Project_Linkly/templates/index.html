@@ -6,10 +6,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>✨Linkly: URL Shortener</h1>
-    <p>Enter a <b>url</b> to shorten</p>
-
-    <input id="linkInput" type="text" placeholder="Enter your url">
+    <h1 id = "Title">✨Linkly: URL Shortener</h1>
+    <div class ="IntroBox">
+    <p>
+        Ever tired of remembering long links like <i>company-user-/route/asset/api/gibberish-long_unneceesary-info_.</i>.
+        <br>
+        Well Linkly has got you covered.🤝🏻
+        <br>
+        With a single click, you can get a short, easy to remember and unique url for any of your metres long urls 😁.
+        <br>
+        <br>
+        Just type in your link below and you'll get a short code for it!
+    </p>
+    </div>
+    <br>
+    <br>
+    <input id="linkInput" placeholder="Enter valid url" value='https://'>
     <button onclick="submitLink()">Submit Link</button>
 
     <p id="responseText"></p>
@@ -22,9 +34,10 @@
             const link = document.getElementById('linkInput').value;
             if (!link) {
                 document.getElementById('responseText').innerText = "⚠️ Please enter a link.";
+                document.getElementById('linkInput').setAttribute('value','https://')
                 return;
             }
-	
+            
             const res = await fetch('/api/shorten', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -36,7 +49,7 @@
                 document.getElementById('responseText').innerText = "❌ " + data.error;
             } else {
                 document.getElementById('responseText').innerText = 
-                    `Your link: ${data.long_link}\nShort url: ${data.result}`;
+                    `Your link: ${data.long_url}\nShort url: ${data.short_code}`;
             }
         }
         async function getAllLinks(){
@@ -47,12 +60,32 @@
         	// Reference to the empty div
   const container = document.getElementById("LinksContainer");
 container.innerHTML = "";
+    let table = document.createElement("table")
+    table.setAttribute('border','1')
+   table.setAttribute('bgcolor','#ffffff')
+   table.setAttribute('class','linktable')
+    let headrow = document.createElement("thead")
+    let head1 = document.createElement("th")
+    head1.innerHTML=`Original link`
+ let head2= document.createElement("th")
+    head2.innerHTML=`Short link`
+    headrow.append(head1)
+    headrow.append(head2)
+    table.append(headrow)
   // Dynamically insert key-value pairs
   for (const [key, value] of Object.entries(data)) {
-    const itemDiv = document.createElement("div");
-    itemDiv.innerHTML = `Original link: <b>${key}</b>: Shortened Link <i>${value}</i>`;
-    container.appendChild(itemDiv);
+    const newrow =document.createElement("tr")
+    const item1 = document.createElement("td")
+    item1.setAttribute('class','linktable_data')
+    item1.innerHTML=`${key}`
+ const item2 = document.createElement("td")
+    item2.innerHTML=`${value}`
+ item2.setAttribute('class','linktable_data')
+    newrow.append(item1)
+    newrow.append(item2)
+    table.append(newrow)
   }
+  container.append(table)
         }
     </script>
 </body>

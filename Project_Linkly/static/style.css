@@ -1,12 +1,18 @@
+/*
+
+core element stylings
+
+*/
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f3f7fa;
+    background-color: #0c0d11be;
     text-align: center;
     padding: 40px;
 }
 
 h1 {
-    color: #007bff;
+    color: #20b652;
 }
 
 input {
@@ -18,7 +24,7 @@ input {
 }
 
 button {
-    background-color: #28a745;
+    background-color: #2764d4a6;
     color: white;
     padding: 8px 12px;
     border: none;
@@ -26,11 +32,14 @@ button {
     margin-left: 10px;
     cursor: pointer;
 }
-
-button:hover {
-    background-color: #218838;
+/*ids*/
+#Title{
+    animation: slideLeft;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    
 }
-
 #responseText {
     margin-top: 20px;
     font-size: 18px;
@@ -41,4 +50,65 @@ button:hover {
 	margin-top: 20px;
 	font-size: 16px;
 	color: rgb(8, 185, 216)
+}
+/*classes*/
+.IntroBox{
+      width: 50%;
+    border-radius: 15px;
+  padding: 50px;
+  margin: 0 auto;
+  box-shadow: 5px #333;
+  background-color: rgba(180, 183, 187, 0.664);
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  color:#182a7a;
+  font-size:larger;
+animation: fadeIn;
+    animation-iteration-count: 1;
+    animation-duration: 1.4s;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+
+.linktable{
+    width: 50%;
+ border-radius: 15px;
+  padding: 50px;
+  margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effects */
+.linktable:hover{
+ box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateY(-3%);
+}
+.linktable_data:hover{
+    color:purple;
+}
+button:hover {
+    background-color: #2fd3e9;
+}
+.IntroBox:hover{
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: translateY(-3%);
+}
+#Title:hover{
+    scale :1.2;
+    font-style: italic;
+}
+/* Animations */
+@keyframes slideLeft {
+    from{transform: translateX(300%);}
+}
+@keyframes fadeIn
+{
+    0%{opacity: 0;}
+    20%{opacity: 0.2;}
+    40%{opacity: 0.4;}
+    60%{opacity: 0.6;}
+    80%{opacity: 0.8;}
+    100%{opacity: 1;}
 }

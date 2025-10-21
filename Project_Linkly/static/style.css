@@ -78,6 +78,7 @@ animation: fadeIn;
   margin: 0 auto;
     align-items: center;
     justify-content: center;
+    background-color: rgba(66, 63, 56, 0.89);
 }
 
 /* Hover effects */

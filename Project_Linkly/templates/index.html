@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Number Guessing Game</title>
+    <title>Linkly: URL Shortener</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!--Introduction-->
     <h1 id = "Title">✨Linkly: URL Shortener</h1>
     <div class ="IntroBox">
     <p>
@@ -21,29 +22,35 @@
     </div>
     <br>
     <br>
+    <!--Input region-->
     <input id="linkInput" placeholder="Enter valid url" value='https://'>
     <button onclick="submitLink()">Submit Link</button>
 
     <p id="responseText"></p>
     <br>
+
+    <!--See database-->
+    <button onclick="getAllLinks()">All links list</button>
+    <!--Empty container-->
     <div id = "LinksContainer"></div>
     
-    <button onclick="getAllLinks()">All links list</button>
     <script>
+    // get short_code
         async function submitLink() {
             const link = document.getElementById('linkInput').value;
+            //check valid input
             if (!link) {
                 document.getElementById('responseText').innerText = "⚠️ Please enter a link.";
                 document.getElementById('linkInput').setAttribute('value','https://')
                 return;
             }
-            
+            // call post
             const res = await fetch('/api/shorten', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ link })
             });
-
+            // return response
             const data = await res.json();
             if (data.error) {
                 document.getElementById('responseText').innerText = "❌ " + data.error;
@@ -52,40 +59,42 @@
                     `Your link: ${data.long_url}\nShort url: ${data.short_code}`;
             }
         }
+        // show all links
         async function getAllLinks(){
         	const res = await fetch('/api/show',{
         	method: 'GET'
         	});
         	const data = await res.json();
         	// Reference to the empty div
-  const container = document.getElementById("LinksContainer");
-container.innerHTML = "";
-    let table = document.createElement("table")
-    table.setAttribute('border','1')
-   table.setAttribute('bgcolor','#ffffff')
-   table.setAttribute('class','linktable')
-    let headrow = document.createElement("thead")
-    let head1 = document.createElement("th")
-    head1.innerHTML=`Original link`
- let head2= document.createElement("th")
-    head2.innerHTML=`Short link`
-    headrow.append(head1)
-    headrow.append(head2)
-    table.append(headrow)
-  // Dynamically insert key-value pairs
-  for (const [key, value] of Object.entries(data)) {
-    const newrow =document.createElement("tr")
-    const item1 = document.createElement("td")
-    item1.setAttribute('class','linktable_data')
-    item1.innerHTML=`${key}`
- const item2 = document.createElement("td")
-    item2.innerHTML=`${value}`
- item2.setAttribute('class','linktable_data')
-    newrow.append(item1)
-    newrow.append(item2)
-    table.append(newrow)
-  }
-  container.append(table)
+            // craeting table
+            const container = document.getElementById("LinksContainer");
+            container.innerHTML = "";
+            let table = document.createElement("table")
+            table.setAttribute('border','1')
+            table.setAttribute('bgcolor','#ffffff')
+            table.setAttribute('class','linktable')
+            let headrow = document.createElement("thead")
+            let head1 = document.createElement("th")
+            head1.innerHTML=`Original link`
+            let head2= document.createElement("th")
+            head2.innerHTML=`Short link`
+            headrow.append(head1)
+            headrow.append(head2)
+            table.append(headrow)
+            // Dynamically insert key-value pairs
+            for (const [key, value] of Object.entries(data)) {
+                const newrow =document.createElement("tr")
+                const item1 = document.createElement("td")
+                item1.setAttribute('class','linktable_data')
+                item1.innerHTML=`${key}`
+                const item2 = document.createElement("td")
+                item2.innerHTML=`${value}`
+                item2.setAttribute('class','linktable_data')
+                newrow.append(item1)
+                newrow.append(item2)
+                table.append(newrow)
+            }
+            container.append(table)
         }
     </script>
 </body>

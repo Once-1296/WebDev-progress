@@ -28,7 +28,9 @@
 
     <p id="responseText"></p>
     <br>
-
+    <!--Redirect to short url-->
+    <input id ="redirectInput" placeholder="Enter Valid Short code">
+    <button onclick="redirectLink()">Fast Travel🚀</button>
     <!--See database-->
     <button onclick="getAllLinks()">All links list</button>
     <!--Empty container-->
@@ -96,6 +98,20 @@
             }
             container.append(table)
         }
+
+    // redirect with short code
+    function redirectLink()
+    {
+        const code = document.getElementById("redirectInput").value
+        if(code)
+    {
+        const path = window.location.origin + '/api/shorten/' +code
+        console.log(path)
+        window.open(path, '_blank'); 
+    }else {
+    alert('Please enter a route.');
+  }
+    }
     </script>
 </body>
 </html>

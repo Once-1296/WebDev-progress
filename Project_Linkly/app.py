@@ -11,6 +11,82 @@ db.init_db()
 
 # Base58 alphabet (excluding confusing chars like 0, O, l, I)
 BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+# --- Load constants ---
+BASE_KEY     = db.get_base_key()
+CIPHER_MAP   = db.get_cipher_map()
+REVERSE_MAP  = db.get_reverse_map()
+ALPHABET     = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+INDEX_TO_CHAR = {i: ch for i, ch in enumerate(ALPHABET)}
+CHAR_TO_INDEX = {ch: i for i, ch in enumerate(ALPHABET)}
+
+PRIME_INCREMENT = [3,15,44,24,4,7]
+
+# ------------------------------
+# Helper: encode / decode utils
+# ------------------------------
+
+def indices_to_string(indices):
+    """Convert list of base58 indices -> string"""
+    return ''.join(INDEX_TO_CHAR[i] for i in indices)
+
+def string_to_indices(code_str):
+    """Convert base58 string -> list of indices"""
+    return [CHAR_TO_INDEX[ch] for ch in code_str]
+
+def apply_cipher(indices):
+    """Apply mono-substitution cipher"""
+    return [CIPHER_MAP[i] for i in indices]
+
+def remove_cipher(indices):
+    """Reverse the cipher"""
+    return [REVERSE_MAP[i] for i in indices]
+
+def increment_base58(indices):
+    """Increment a base-58 array by 1 (like an odometer)."""
+    arr = indices[:]
+    i = len(arr) - 1
+    carry = 1
+    while i >= 0 and carry:
+        arr[i] = (arr[i] + carry) % 58
+        carry = 1 if arr[i] == 0 else 0
+        i -= 1
+    return arr
+
+def prime_increment_base58(indices):
+    # add prime (1<<31) - 1
+    arr = indices[:]
+    i = len(arr) - 1
+    carry = 0
+    while i >= 0:
+        arr[i] = (arr[i] + PRIME_INCREMENT[i] + carry)
+        carry = 1 if arr[i] >=58 else 0
+        arr[i] =(arr[i])%58
+        i -= 1
+    return arr
+
+
+# ------------------------------
+# Main short-code generator
+# ------------------------------
+def generate_next_code():
+    """Return next short code as 6-char Base58 string using seed & cipher."""
+    last_code = db.get_last_short_code()
+
+    if not last_code:
+        # --- No previous URL, use base key ---
+        base = BASE_KEY
+    else:
+        # --- Decode last code ---
+        last_indices = string_to_indices(last_code)
+        # reverse cipher first to get numeric sequence
+        decoded = remove_cipher(last_indices)
+        # increment
+        base = prime_increment_base58(decoded)
+
+    # Apply cipher again and convert to string
+    ciphered = apply_cipher(base)
+    short_code = indices_to_string(ciphered)
+    return short_code
 
 def generate_short_code(length=6):
     #use base 58 encoding to create a random short_code
@@ -53,7 +129,7 @@ def shorten_url():
 
     # Generate a unique short code
     while True:
-        short_code = generate_short_code()
+        short_code = generate_next_code()
         if not db.get_long_url(short_code):
             break
 

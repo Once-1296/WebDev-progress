@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leetcode Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1></h1>
+    <div id = "leaderboard"></div>
+    <input id="UserName" placeholder="Enter valid leetcode username" value="Awwabcoder23">
+    <button onclick="getdetails()">Get rating</button>
+    <div id="Ratingcontainer"></div>
+    <script>
+        async function getdetails(){
+            const user = document.getElementById('UserName').value;
+            if(user){
+                const res = await fetch('/api/add',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ user })
+            });
+                data = await res.json();
+                const container = document.getElementById('Ratingcontainer')
+                container.innerHTML = ''
+                console.log(data)
+                if("rating" in data){
+                    
+                    container.innerHTML = `<p>${data["rating"]}</p>`
+                }
+                else{
+                    container.innerHTML = `<p>${data["error"]}</p>`
+                }
+            }
+            else{
+                alert('Enter a username')
+            }
+            
+        }
+    </script>
+</body>
+</html>

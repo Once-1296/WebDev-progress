@@ -1,12 +1,27 @@
 from flask import Flask, jsonify, request, render_template
 import requests
+from flask_sqlalchemy import SQLAlchemy
+from config import SQLALCHEMY_DATABASE_URI
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+print(app.config["SQLALCHEMY_DATABASE_URI"])
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Entry(db.Model):
+    id = db.Column(db.Integer, primary_key =True)
+    username = db.Column(db.String(100), unique = True, nullable = False)
+    rating = db.Column(db.Integer, unique = False, nullable = False)
+
 
 LEETCODE_URL = "http://127.0.0.1:8000/"
 PROFILE_PAGE = "leetcode_profile/"
 STATS_PAGE = "leetcode_contest_stats/"
 
-users = {}
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def home():
@@ -24,9 +39,21 @@ def add_user():
     if not "userContestRanking" in dat1:
         return jsonify({"error": "Wrong username"}), 404
     rating = dat1["userContestRanking"]["rating"]
-    
-    users.update({username : rating})
+    new_entry = Entry(username = username, rating = rating)
+    db.session.add(new_entry)
+    db.session.commit()
     return jsonify({"rating":rating}),200
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/api/all_users',methods=['GET'])
+def get_users():
+    entries = Entry.query.all()
+    return jsonify([
+        {
+            "id": e.id,
+            "username": e.username,
+            "rating": e.rating
+        }
+        for e in entries
+    ]), 200
+
+app.run(debug=True)

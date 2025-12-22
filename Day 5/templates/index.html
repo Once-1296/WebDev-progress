@@ -2,58 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Leetcode Checker</title>
+    <title>Personal Leetcode Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1></h1>
-    <div id = "leaderboard"></div>
-    <input id="UserName" placeholder="Enter valid leetcode username" value="Awwabcoder23">
-    <button onclick="getdetails()">Get rating</button>
-    <div id="Ratingcontainer"></div>
-    <script>
-        async function getdetails(){
-            const user = document.getElementById('UserName').value;
-            if(user){
-                const res = await fetch('/api/add',{
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ user })
-            });
-                data = await res.json();
-                const container = document.getElementById('Ratingcontainer')
-                container.innerHTML = ''
-                console.log(data)
-                if("rating" in data){
-                    
-                    container.innerHTML = `<p>${data["rating"]}</p>`
-                }
-                else{
-                    container.innerHTML = `<p>${data["error"]}</p>`
-                }
-            }
-            else{
-                alert('Enter a username')
-            }
-            
-        }
-        async function displayUsers(){
-            const res = await fetch('/api/all_users',{method: 'GET'})
-            const data = await res.json()
-            data.sort((a,b)=>{
-                return b.rating - a.rating;
-            });
-            const container = document.getElementById('leaderboard')
-            data.forEach(user=>{
-                const div = document.createElement('div');
-                div.className = 'entry';
-                div.innerHTML = `
-                    <span>${user.username} ${user.rating}</span>
-                `;
-                container.appendChild(div);
-            })
-        }
-        displayUsers()
-    </script>
+<body class="light">
+
+    <!-- Theme toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
+    <h1 class="title">Personal Leetcode Leaderboard</h1>
+
+    <p class="description">
+        A personal leaderboard that tracks LeetCode contest ratings for users in real time.
+        Ratings update automatically and ranks adjust dynamically.
+    </p>
+
+    <div id="leaderboard"></div>
+
+    <div id="userinput">
+        <input id="UserName" placeholder="Enter valid LeetCode username">
+        <button onclick="addUser()">Get Rating</button>
+    </div>
+
+<script>
+/* ============================
+   Generic fetch helper
+============================ */
+async function fetchJSON(url, options = {}) {
+    const res = await fetch(url, options);
+
+    if (!res.ok) {
+        let msg = "Request failed";
+        try {
+            const err = await res.json();
+            msg = err.error || msg;
+        } catch {}
+        throw new Error(msg);
+    }
+
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+}
+
+/* ============================
+   Add user
+============================ */
+async function addUser() {
+    const input = document.getElementById("UserName");
+    const username = input.value.trim();
+
+    if (!username) {
+        alert("Enter a username");
+        return;
+    }
+
+    try {
+        await fetchJSON("/api/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user: username })
+        });
+
+        input.value = "";
+        await displayUsers();
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+/* ============================
+   Delete user
+============================ */
+async function deleteEntry(id) {
+    if (!confirm("Delete this entry?")) return;
+
+    try {
+        await fetchJSON(`/api/delete/${id}`, { method: "DELETE" });
+        await displayUsers();
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+/* ============================
+   Render leaderboard
+============================ */
+function renderLeaderboard(users) {
+    const container = document.getElementById("leaderboard");
+    container.innerHTML = "";
+
+    const table = document.createElement("table");
+
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Rating</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    `;
+
+    const tbody = document.createElement("tbody");
+
+    users.forEach((user, index) => {
+        const row = document.createElement("tr");
+
+        row.classList.add(
+            index === 0 ? "gold" :
+            index === 1 ? "silver" :
+            index === 2 ? "bronze" : "rest"
+        );
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${user.username}</td>
+            <td>${Math.round(user.rating)}</td>
+            <td><button onclick="deleteEntry(${user.id})">Delete</button></td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+/* ============================
+   Fetch & display users
+============================ */
+async function displayUsers() {
+    const users = await fetchJSON("/api/all_users");
+    users.sort((a, b) => b.rating - a.rating);
+    renderLeaderboard(users);
+}
+
+/* ============================
+   Theme toggle
+============================ */
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+}
+
+/* ============================
+   Initial load
+============================ */
+document.addEventListener("DOMContentLoaded", displayUsers);
+</script>
+
 </body>
 </html>

@@ -1,0 +1,66 @@
+/* About Page */
+.about {
+  background-color: whitesmoke;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 4px 0px solid rgb(69, 66, 66);
+  border-radius: 8px;
+  background-color: rgb(229, 231, 235);
+}
+.about:hover {
+  transform: translateY(-3%);
+  font-style: italic;
+}
+#about_head {
+  animation: fadeUp;
+  animation-duration: 1.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+  scale: 1.2;
+}
+#about_head:hover {
+  scale: 1.5;
+  /* font-style: italic; */
+}
+#about_bg {
+  animation: fadeUp;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#about_tm {
+  animation: fadeUp;
+  animation-duration: 2.7s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#about_hb {
+  animation: fadeUp;
+  animation-duration: 3.2s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(300%);
+  }
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}

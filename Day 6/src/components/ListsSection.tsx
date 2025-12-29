@@ -1,8 +1,13 @@
 import React from "react";
+import ScrollToTop from "./ScrolltoTop";
+import ScrollToBottom from "./ScrolltoBottom";
+import "../styles/listpage.css"
 
 const ListsSection: React.FC = () => {
   return (
     <main>
+      <ScrollToTop />
+      <ScrollToBottom />
       <section
         id="lists"
         className="container mx-auto px-4 sm:px-6 md:px-10 py-10 sm:py-12"

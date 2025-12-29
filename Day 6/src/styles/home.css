@@ -1,0 +1,36 @@
+/* Home Page */
+
+#hometext {
+  animation: fadeUp;
+  animation-duration: 3s;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-iteration-count: 1;
+}
+#hometext:hover {
+  scale: 1.15;
+  font-style: italic;
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(300%);
+  }
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}

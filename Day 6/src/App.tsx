@@ -6,6 +6,8 @@ import HomePage from "./components/HomeSection";
 import AboutPage from "./components/AboutSection";
 import ContactPage from "./components/ContactSection";
 import ListsPage from "./components/ListsSection";
+import SomeNewPage from "./components/newPage";
+
 function App() {
   return (
    
@@ -19,6 +21,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/lists" element={<ListsPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/new_page" element={<SomeNewPage />} />
          
         </Routes>
          </main>

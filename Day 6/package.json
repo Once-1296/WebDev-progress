@@ -18,6 +18,7 @@
     "emailjs": "^4.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
@@ -37,8 +38,8 @@
     "vite": "^7.1.10"
   },
   "overrides": {
-  "esbuild": "^0.25.0",
-  "path-to-regexp": "^6.3.0",
-  "undici": "^5.28.5"
-}
+    "esbuild": "^0.25.0",
+    "path-to-regexp": "^6.3.0",
+    "undici": "^5.28.5"
+  }
 }

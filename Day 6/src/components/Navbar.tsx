@@ -21,10 +21,7 @@ const Navbar: React.FC = () => {
       {/* Top Row */}
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <h1
-          id="PortfolioHead"
-          className="text-red-500 text-xl md:text-2xl font-bold"
-        >
+        <h1 id="HEADER" className="text-red-500 text-xl md:text-2xl font-bold">
           YOR COMPANY
         </h1>
 
@@ -52,9 +49,12 @@ const Navbar: React.FC = () => {
             <Link to="/contact">Contact</Link>
           </li>
           <li id="myNav">
+            <Link to="/new_page">New_Page</Link>
+          </li>
+          <li id="myNav">
             <a
               href="https://media.tenor.com/iSiACRC6RdwAAAAM/job-application-job.gif"
-              target = "_blank"
+              target="_blank"
               className="bg-gradient-to-r from-yellow-400 to-orange-400 text-black font-semibold px-3 py-2 rounded-lg hover:opacity-90 transition duration-200 block text-center"
             >
               ADD PAGES BRO
@@ -92,6 +92,11 @@ const Navbar: React.FC = () => {
           <li>
             <Link to="/contact" onClick={() => setMenuOpen(false)}>
               Contact
+            </Link>
+          </li>
+          <li>
+            <Link to="/new_page" onClick={() => setMenuOpen(false)}>
+              New_Page
             </Link>
           </li>
           <li>

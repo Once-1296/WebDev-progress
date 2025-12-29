@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
+import ScrollToTop from "./ScrolltoTop";
+import ScrollToBottom from "./ScrolltoBottom";
+import "../styles/contact.css"
+
 
 const Contact: React.FC = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -35,6 +39,8 @@ const Contact: React.FC = () => {
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <ScrollToTop />
+      <ScrollToBottom />
       <h2
         id="con_head"
         className="text-2xl sm:text-3xl font-semibold mb-8 text-center"
